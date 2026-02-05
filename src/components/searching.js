@@ -1,11 +1,22 @@
-import {rules, createComparison} from "../lib/compare.js";
-
-
 export function initSearching(searchField) {
-    // @todo: #5.1 — настроить компаратор
+    console.log('🔍 Инициализация поиска для поля:', searchField);
 
-    return (data, state, action) => {
-        // @todo: #5.2 — применить компаратор
-        return data;
-    }
+    // Функция для формирования параметров поиска (вызывается ДО запроса)
+    const applySearching = (query, state, action) => {
+        console.log('🔎 Поиск: значение поля', searchField, '=', state[searchField]);
+        
+        // Если в поле поиска есть текст, добавляем параметр search в query
+        if (state[searchField] && state[searchField].trim() !== '') {
+            console.log('✅ Добавляем поисковый запрос в параметры:', state[searchField]);
+            return Object.assign({}, query, {
+                search: state[searchField].trim()
+            });
+        }
+        
+        // Если поле поиска пустое, возвращаем query без изменений
+        console.log('ℹ️ Поле поиска пустое, не добавляем параметр');
+        return query;
+    };
+
+    return applySearching;
 }
